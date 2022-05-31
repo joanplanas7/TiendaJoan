@@ -1,0 +1,7 @@
+<section class="productes">
+   <app-producte 
+        (afegirCarritoClick)="afegirCarrito($event)"
+        [pro]="pro" 
+        *ngFor="let pro of productes">
+    </app-producte>
+</section>
