@@ -1,0 +1,39 @@
+<div class="container">
+    <form class="form item">
+        <mat-form-field class="formElement">
+            <input type="text" matInput placeholder="Nom" required [(ngModel)]="model.nom" name="nom" #nom="ngModel">
+            <mat-error *ngIf="!nom.valid || nom.pristine">
+                El nom és obligatori. 
+            </mat-error>
+        </mat-form-field> 
+
+        <mat-radio-group class="formElement">
+            <p>Escull una opció:</p>
+            <mat-radio-button value="casa" (change)="entrega(false)">Entrega a domicili</mat-radio-button>
+            <mat-radio-button value="tenda" (change)="entrega(true)">Recollida en botiga</mat-radio-button>
+        </mat-radio-group>
+
+        <mat-form-field class="formElement">
+            <input type="text" matInput placeholder="Direcció" [(ngModel)]="model.adress" name="adress" #adress="ngModel">
+        </mat-form-field> 
+
+        <mat-form-field class="formElement">
+            <input type="text" matInput placeholder="Ciutat" [(ngModel)]="model.ciutat" name="ciutat" #ciutat="ngModel">
+        </mat-form-field> 
+
+        <mat-form-field class="formElement">
+            <mat-label>Seleciona una botiga:</mat-label>
+            <mat-select [(ngModel)]="model.botiga" name="botiga" #botiga="ngModel">
+                <mat-option [value]="botiga" *ngFor="let botiga of tendas">
+                    {{botiga.name}} - {{botiga.openingHours}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field> 
+    </form>
+</div>
+
+<div class="containerButtom">
+    <button [disabled]="" mat-raised-button color="primary" type="submit">
+        Comprar
+    </button>
+</div>
