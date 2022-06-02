@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductesService } from './serveis/productes.service';
 import {tap} from 'rxjs/operators'
 import { Producte } from './interficies/producte.interface';
+import { CarritoService } from 'src/app/shared/serveis/carrito.services';
 
 @Component({
   selector: 'app-productes',
@@ -10,7 +11,7 @@ import { Producte } from './interficies/producte.interface';
 })
 export class ProductesComponent implements OnInit {
   productes!: Producte[];
-  constructor(private producteServei: ProductesService) { }
+  constructor(private producteServei: ProductesService, private carritoSer: CarritoService ) { }
 
   ngOnInit(): void {
     this.producteServei.getProductes()
@@ -20,6 +21,6 @@ export class ProductesComponent implements OnInit {
   }
 
   afegirCarrito(producte: Producte):void{
-    console.log("funcioa", producte);
+    this.carritoSer.updateCarr(producte);
   }
 }
