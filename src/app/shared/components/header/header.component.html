@@ -1,5 +1,12 @@
 <mat-toolbar color="primary">
-    <span>Botiga Joan Planas</span>
+    <ul class="menu">
+        <li class="itemMenu">
+            <a class="links" [routerLink]="['/']">Botiga Joan Planas</a>
+        </li>
+        <li class="itemMenu">
+            <a class="links" [routerLink]="['/productes']">Productes</a>
+        </li>
+    </ul>
     <span class="espai"></span>
-    <app-carrito></app-carrito>
+    <app-carrito class="click" (click)="toCheck()"></app-carrito>
 </mat-toolbar>
