@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckoutComponent implements OnInit {
   model = {
-    nom:'lala',
+    nom:'',
     entregaForma: '',
     adress: '',
     ciutat: '',
@@ -37,6 +37,9 @@ export class CheckoutComponent implements OnInit {
 
   entrega(valor: boolean): void{
 
+  }
+  enviarForm(): void{
+    
   }
 
 }

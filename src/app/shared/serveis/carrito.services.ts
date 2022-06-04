@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable} from "rxjs";
 import { Producte } from "src/app/pagines/productes/interficies/producte.interface";
 
 @Injectable(
@@ -9,9 +9,9 @@ import { Producte } from "src/app/pagines/productes/interficies/producte.interfa
 export class CarritoService{
     productes: Producte[] = [];
 
-    private productesSub = new Subject<Producte[]>();
-    private totalProducteSub = new Subject<number>();
-    private quantitatSub = new Subject<number>();
+    private productesSub = new BehaviorSubject<Producte[]>([]);
+    private totalProducteSub = new BehaviorSubject<number>(0);
+    private quantitatSub = new BehaviorSubject<number>(0);
 
     //getters
     get getTotal(): Observable<number>{
@@ -35,17 +35,23 @@ export class CarritoService{
 
     //metodes privats per la gestio del carrito
     private quantitatProductes(): void{
-        const quantitatProd = this.productes.length;
+        const quantitatProd = this.productes.reduce((tot, prod)=> tot += prod.qty,0);
         this.quantitatSub.next(quantitatProd);
     }
 
     private calcTotal(): void{
-        const total = this.productes.reduce((tot, prod)=> tot += prod.price,0);
+        const total = this.productes.reduce((tot, prod)=> tot += (prod.price * prod.qty),0);
         this.totalProducteSub.next(total);
     }
 
     private afegirCarr(producte:Producte): void{
-        this.productes.push(producte);
+        const repetit = this.productes.find(({id}) => id == producte.id);
+        if(repetit){
+            repetit.qty += 1;
+        }else{
+            producte.qty = 1;
+            this.productes.push(producte);
+        }
         this.productesSub.next(this.productes);
     }
 }
