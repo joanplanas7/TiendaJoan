@@ -1,5 +1,5 @@
 <div class="container">
-    <form class="form item" #fromulari="ngForm">
+    <form class="form item" #fromulariComanda="ngForm">
         <mat-form-field class="formElement">
             <input type="text" matInput placeholder="Nom" required [(ngModel)]="model.nom" name="nom" #nom="ngModel">
             <mat-error *ngIf="!nom.valid || nom.pristine">
@@ -37,7 +37,7 @@
 </div>
 <app-comanda></app-comanda>
 <div class="containerButtom">
-    <button [disabled]="!fromulari.form.valid" mat-raised-button color="primary" type="submit" ((click))="enviarForm()">
+    <button [disabled]="!fromulariComanda.form.valid" mat-raised-button color="primary" type="submit" (click)="enviarForm(fromulariComanda)">
         Comprar
     </button>
 </div>

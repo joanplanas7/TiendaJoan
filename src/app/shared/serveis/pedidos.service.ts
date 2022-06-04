@@ -16,7 +16,7 @@ export class PedidosService{
         return this.http.post<Comanda>(`${this.api}/comandes`, comanda);
     }
 
-    guardarDetalls(detalls: DetallsComanda): Observable<DetallsComanda>{
+    guardarDetallsComanda(detalls: DetallsComanda): Observable<DetallsComanda>{
         return this.http.post<DetallsComanda>(`${this.api}/detailsOrders`, detalls);
     }
 }
