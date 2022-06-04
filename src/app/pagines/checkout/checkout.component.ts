@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { tap } from 'rxjs/operators';
+import { Tenda } from 'src/app/shared/interficies/tendas.interfice';
+import { TendasService } from 'src/app/shared/serveis/tendas.services';
 
 @Component({
   selector: 'app-checkout',
@@ -13,33 +16,26 @@ export class CheckoutComponent implements OnInit {
     ciutat: '',
     botiga:''
   }
-
-  tendas = [
-    {
-      "id": 1,
-      "name": "Park Row at Beekman St",
-      "address": "38 Park Row",
-      "city": "New York",
-      "openingHours": "10:00 - 14:00 and 17:00 - 20:30"
-    },
-    {
-      "id": 2,
-      "name": "Store Alcalá",
-      "address": "Calle de Alcalá, 21",
-      "city": "Madrid",
-      "openingHours": "10:00 - 14:00 and 17:00 - 20:30"
-    }
-  ]
-  constructor() { }
+  metodeEntrega: boolean = true;
+  tendas: Tenda[] = []
+  constructor(private tendaServei: TendasService) { }
 
   ngOnInit(): void {
+    this.getTendas();
   }
 
   entrega(valor: boolean): void{
-
+    this.metodeEntrega = valor;
   }
   enviarForm(): void{
     
+  }
+
+  private getTendas():void{
+    this.tendaServei.getTendas()
+      .pipe(
+          tap((tendas:Tenda[]) => this.tendas = tendas))
+      .subscribe();
   }
 
 }

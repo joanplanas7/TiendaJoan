@@ -116,7 +116,7 @@
         "stock": 10
       }
     ],
-    "orders": [
+    "comandes": [
       {
         "id": 1,
         "name": "Dominicode",
