@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { switchMap, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { delay, switchMap, tap } from 'rxjs/operators';
 import { Comanda } from 'src/app/shared/interficies/comanda.interfice';
 import { Detalls } from 'src/app/shared/interficies/detalls.interfice';
 import { Tenda } from 'src/app/shared/interficies/tendas.interfice';
@@ -8,6 +9,7 @@ import { CarritoService } from 'src/app/shared/serveis/carrito.services';
 import { PedidosService } from 'src/app/shared/serveis/pedidos.service';
 import { TendasService } from 'src/app/shared/serveis/tendas.services';
 import { Producte } from '../productes/interficies/producte.interface';
+import { ProductesService } from '../productes/serveis/productes.service';
 
 @Component({
   selector: 'app-checkout',
@@ -22,14 +24,23 @@ export class CheckoutComponent implements OnInit {
     ciutat: '',
     botiga:''
   }
-  metodeEntrega: boolean = true;
+  metodeEntrega: boolean = false;
   tendas: Tenda[] = []
   carrito: Producte[] = [];
-  constructor(private tendaServei: TendasService, private comandaServei: PedidosService, private carritoServei: CarritoService) { }
+  constructor(
+    private tendaServei: TendasService, 
+    private comandaServei: PedidosService, 
+    private carritoServei: CarritoService,
+    private producteServei: ProductesService,
+    private rutes: Router
+    ) { 
+      this.carritoBuit();
+    }
 
   ngOnInit(): void {
     this.getTendas();
     this.getCarrito();
+    this.prepararDetalls();
   }
 
   entrega(valor: boolean): void{
@@ -45,13 +56,13 @@ export class CheckoutComponent implements OnInit {
 
     this.comandaServei.guardarPedido(comanda)
     .pipe(
-        tap((res) => console.log(res)),
-        switchMap ((comanda) =>{
+        switchMap (({id:orderId}) =>{
           const detalls = this.prepararDetalls();
-          const orderId = comanda.id;
           return this.comandaServei.guardarDetallsComanda({details:detalls, orderId});
         }),
-        tap((res) => console.log("Ha acabat", res)),
+        tap(() => this.rutes.navigate(['/checkout/gracies'])),
+        delay(2500),
+        tap(() => this.carritoServei.resterCarrito()),
     )
     .subscribe();
   }
@@ -69,8 +80,18 @@ export class CheckoutComponent implements OnInit {
 
   private prepararDetalls(): Detalls[]{
     const detalls : Detalls[] = [];
-    this.carrito.forEach( res => {
-        console.log(res);
+    this.carrito.forEach( (prod:Producte) => {
+        const  {id: idProd, name: nomProd, qty:quantitat, stock} = prod;
+
+        const actStock = (stock-quantitat);  
+        this.producteServei.actStock(prod.id, actStock)
+          .pipe(
+            tap(()=> detalls.push({productId:idProd, productName:nomProd, quantity: quantitat}))
+          )
+          .subscribe();
+
+
+        
     });
     
     return detalls;
@@ -82,6 +103,18 @@ export class CheckoutComponent implements OnInit {
       tap((productes: Producte[]) => this.carrito = productes)
     )
     .subscribe();
+  }
+
+  private carritoBuit():void{
+    this.carritoServei.getProductes
+      .pipe(
+        tap((prod: Producte[])=> {
+          if(Array.isArray(prod) && !prod.length){
+            this.rutes.navigate(["/productes"]);
+          }
+        })
+      )
+      .subscribe();
   }
 
 }

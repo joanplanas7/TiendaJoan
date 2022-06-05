@@ -31,6 +31,15 @@ export class CarritoService{
         this.calcTotal();
 
     }
+
+    //restejar el carrirto
+    public resterCarrito():void{
+        this.productesSub.next([]);
+        this.quantitatSub.next(0);
+        this.totalProducteSub.next(0);
+
+        this.productes = [];
+    }
     
 
     //metodes privats per la gestio del carrito

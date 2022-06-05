@@ -9,11 +9,11 @@
 
         <mat-radio-group class="formElement">
             <p>Escull una opció:</p>
-            <mat-radio-button value="casa" (change)="entrega(true)" checked>Entrega a domicili</mat-radio-button>
-            <mat-radio-button value="tenda" (change)="entrega(false)">Recollida en botiga</mat-radio-button>
+            <mat-radio-button value="casa" (change)="entrega(false)" checked>Entrega a domicili</mat-radio-button>
+            <mat-radio-button value="tenda" (change)="entrega(true)">Recollida en botiga</mat-radio-button>
         </mat-radio-group>
 
-        <ng-container *ngIf="metodeEntrega; else seleccionarBot">
+        <ng-container *ngIf="!metodeEntrega; else seleccionarBot">
             <mat-form-field class="formElement">
                 <input type="text" matInput placeholder="Direcció" [(ngModel)]="model.adress" name="adress" #adress="ngModel">
             </mat-form-field> 

@@ -24,7 +24,6 @@ export class CarritoComponent{
    
     quantitat$ = this.carritoSer.getQuantitat;
     total$ = this.carritoSer.getTotal;
-    carrito$ = this.carritoSer.getProductes; 
 
     constructor(private carritoSer: CarritoService){}
 }
